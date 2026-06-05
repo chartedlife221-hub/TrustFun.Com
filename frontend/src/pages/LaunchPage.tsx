@@ -1,10 +1,25 @@
-function LaunchPage() {
-  return (
-    <div className="launch-page">
-      <h1>Launch Your Token</h1>
-      <p>Create and launch your SPL token on Solana</p>
-    </div>
-  )
-}
+import Navbar from
+"../components/layout/Navbar";
 
-export default LaunchPage
+export default function LaunchPage() {
+  return (
+    <>
+      <Navbar />
+
+      <div
+        style={{
+          padding: "2rem"
+        }}
+      >
+        <h1>
+          Launch Token
+        </h1>
+
+        <p>
+          Token creation form
+          coming next.
+        </p>
+      </div>
+    </>
+  );
+}
