@@ -1,10 +1,25 @@
-function ExplorePage() {
-  return (
-    <div className="explore-page">
-      <h1>Explore Tokens</h1>
-      <p>Discover and trade tokens on the TrustFun launchpad</p>
-    </div>
-  )
-}
+import Navbar from
+"../components/layout/Navbar";
 
-export default ExplorePage
+export default function ExplorePage() {
+  return (
+    <>
+      <Navbar />
+
+      <div
+        style={{
+          padding: "2rem"
+        }}
+      >
+        <h1>
+          Explore Tokens
+        </h1>
+
+        <p>
+          Trending launches
+          coming next.
+        </p>
+      </div>
+    </>
+  );
+}
