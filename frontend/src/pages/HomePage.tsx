@@ -1,10 +1,25 @@
-function HomePage() {
-  return (
-    <div className="home-page">
-      <h1>Welcome to TrustFun</h1>
-      <p>A secure Solana meme coin launchpad</p>
-    </div>
-  )
-}
+import Navbar from
+"../components/layout/Navbar";
 
-export default HomePage
+export default function HomePage() {
+  return (
+    <>
+      <Navbar />
+
+      <div
+        style={{
+          padding: "2rem"
+        }}
+      >
+        <h1>
+          TrustFUN V2
+        </h1>
+
+        <p>
+          Launch Solana Meme
+          Coins Easily.
+        </p>
+      </div>
+    </>
+  );
+}
