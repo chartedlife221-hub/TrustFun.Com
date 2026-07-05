@@ -1,0 +1,49 @@
+.link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--fs-lg);
+}
+
+.symbol {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.desc {
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-4);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.badges {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-3);
+}
