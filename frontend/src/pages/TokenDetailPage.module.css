@@ -1,0 +1,78 @@
+.wrap {
+  padding: var(--sp-6) 0 var(--sp-8);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.back:hover {
+  color: var(--text-primary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+
+.proposal {
+  padding: var(--sp-4);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-4);
+}
+
+.proposalTop {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+.voteRow {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  margin-top: var(--sp-3);
+}
+
+.voteBarTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+  display: flex;
+}
+
+.post {
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--surface-border);
+}
+
+.post:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.postMeta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.composer {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.composer textarea {
+  flex: 1;
+  min-width: 220px;
+}

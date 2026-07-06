@@ -1,0 +1,11 @@
+{
+  "name": "@trustfun/shared",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types/token.ts",
+    "./risk-engine": "./src/riskEngine.ts"
+  }
+}

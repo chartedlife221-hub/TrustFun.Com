@@ -1,5 +1,10 @@
 import Router from "./Router";
+import { WalletProvider } from "../contexts/WalletContext";
 
 export default function App() {
-  return <Router />;
+  return (
+    <WalletProvider>
+      <Router />
+    </WalletProvider>
+  );
 }

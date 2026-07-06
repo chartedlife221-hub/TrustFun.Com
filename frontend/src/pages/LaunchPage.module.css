@@ -1,0 +1,64 @@
+.wrap {
+  padding: var(--sp-6) 0 var(--sp-8);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+@media (max-width: 640px) {
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.choiceGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+
+@media (max-width: 640px) {
+  .choiceGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.choiceCard {
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-1);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  color: inherit;
+  width: 100%;
+}
+
+.choiceCard:hover {
+  border-color: var(--brand-500);
+}
+
+.distRow {
+  display: grid;
+  grid-template-columns: 1fr 6rem auto;
+  gap: var(--sp-3);
+  align-items: end;
+  margin-bottom: var(--sp-3);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--sp-6);
+}
+
+.totalTag {
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-3);
+}

@@ -1,0 +1,28 @@
+.list {
+  display: flex;
+  gap: var(--sp-2);
+  border-bottom: 1px solid var(--surface-border);
+  margin-bottom: var(--sp-5);
+  overflow-x: auto;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  padding: var(--sp-3) var(--sp-2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.active {
+  color: var(--brand-400);
+  border-bottom-color: var(--brand-500);
+}
