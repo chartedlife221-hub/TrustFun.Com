@@ -4,6 +4,7 @@ import PageLayout from "../components/layout/PageLayout";
 import DisclosureCard from "../components/token/DisclosureCard";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import Alert from "../components/ui/Alert";
 import Tabs from "../components/ui/Tabs";
 import { TextAreaField } from "../components/ui/Field";
 import {
@@ -75,13 +76,30 @@ export default function TokenDetailPage() {
   const [proposals, setProposals] = useState<GovernanceProposal[]>([]);
   const [posts, setPosts] = useState<DiscussionPost[]>([]);
   const [draft, setDraft] = useState("");
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [communityError, setCommunityError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
-    getToken(id).then(setToken);
-    listProposals(id).then(setProposals);
-    listDiscussion(id).then(setPosts);
+    setLoadError(null);
+    getToken(id)
+      .then(setToken)
+      .catch((err) => setLoadError(err instanceof Error ? err.message : "Failed to load token."));
+    listProposals(id).catch(() => undefined).then((data) => data && setProposals(data));
+    listDiscussion(id).catch(() => undefined).then((data) => data && setPosts(data));
   }, [id]);
+
+  if (loadError) {
+    return (
+      <PageLayout>
+        <div className="container" style={{ padding: "var(--sp-7) 0" }}>
+          <Alert tone="danger" title="Couldn't load this token">
+            {loadError}
+          </Alert>
+        </div>
+      </PageLayout>
+    );
+  }
 
   if (token === null) {
     return (
@@ -110,15 +128,25 @@ export default function TokenDetailPage() {
   }
 
   async function handleVote(proposalId: string, direction: "for" | "against") {
-    const updated = await voteOnProposal(proposalId, direction);
-    setProposals((prev) => prev.map((p) => (p.id === proposalId ? updated : p)));
+    setCommunityError(null);
+    try {
+      const updated = await voteOnProposal(proposalId, direction);
+      setProposals((prev) => prev.map((p) => (p.id === proposalId ? updated : p)));
+    } catch (err) {
+      setCommunityError(err instanceof Error ? err.message : "Failed to record your vote.");
+    }
   }
 
   async function handlePost() {
     if (!id || draft.trim().length === 0) return;
-    const post = await postDiscussion(id, "You", draft.trim());
-    setPosts((prev) => [...prev, post]);
-    setDraft("");
+    setCommunityError(null);
+    try {
+      const post = await postDiscussion(id, "You", draft.trim());
+      setPosts((prev) => [...prev, post]);
+      setDraft("");
+    } catch (err) {
+      setCommunityError(err instanceof Error ? err.message : "Failed to post your comment.");
+    }
   }
 
   return (
@@ -144,6 +172,7 @@ export default function TokenDetailPage() {
 
             {tab === "community" && (
               <div style={{ display: "grid", gap: "var(--sp-6)" }}>
+                {communityError && <Alert tone="danger">{communityError}</Alert>}
                 <Card>
                   <h2 style={{ fontSize: "var(--fs-lg)" }}>Governance proposals</h2>
                   {proposals.length === 0 ? (

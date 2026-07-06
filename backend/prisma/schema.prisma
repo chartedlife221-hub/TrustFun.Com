@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LaunchStage {
+  draft
+  published
+}
+
+enum TokenomicsSource {
+  creator_authored
+  ai_assisted
+}
+
+enum ComplianceStatus {
+  not_applicable
+  pending_review
+  approved
+  rejected
+}
+
+enum ProposalStatus {
+  open
+  closed
+}
+
+model Creator {
+  id            String   @id @default(uuid())
+  displayName   String
+  walletAddress String   @unique
+  verified      Boolean  @default(false)
+  isAnonymous   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  tokens Token[]
+}
+
+model Token {
+  id                  String      @id @default(uuid())
+  name                String
+  symbol              String
+  description         String
+  chain               String      @default("solana")
+  createdAt           DateTime    @default(now())
+  creatorId           String
+  creator             Creator     @relation(fields: [creatorId], references: [id])
+  stage               LaunchStage @default(draft)
+  totalSupply         BigInt
+  disclosureComplete  Boolean     @default(false)
+
+  liquidityLocked           Boolean   @default(false)
+  liquidityLockedPercent    Int?
+  liquidityUnlockDate       DateTime?
+  liquidityLockContractUrl  String?
+
+  tokenomicsSource                TokenomicsSource @default(creator_authored)
+  tokenomicsSummary               String           @default("")
+  tokenomicsDistribution          Json
+  tokenomicsVestingDescription    String?
+  tokenomicsComplianceStatus      ComplianceStatus @default(not_applicable)
+  tokenomicsGeneratedAt           DateTime?
+  tokenomicsReviewedAt            DateTime?
+
+  riskScore               Int      @default(100)
+  riskFactors              Json
+  riskComputedAt           DateTime @default(now())
+  riskMethodologyVersion   String   @default("baseline-rules-v0.1")
+
+  proposals        GovernanceProposal[]
+  discussionPosts   DiscussionPost[]
+
+  @@index([stage])
+  @@index([tokenomicsComplianceStatus])
+}
+
+model GovernanceProposal {
+  id           String         @id @default(uuid())
+  tokenId      String
+  token        Token          @relation(fields: [tokenId], references: [id])
+  title        String
+  description  String
+  status       ProposalStatus @default(open)
+  votesFor     Int            @default(0)
+  votesAgainst Int            @default(0)
+  createdAt    DateTime       @default(now())
+
+  @@index([tokenId])
+}
+
+model DiscussionPost {
+  id        String   @id @default(uuid())
+  tokenId   String
+  token     Token    @relation(fields: [tokenId], references: [id])
+  author    String
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([tokenId, createdAt])
+}

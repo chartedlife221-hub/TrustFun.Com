@@ -38,6 +38,11 @@ export default function LaunchPage() {
   const [creatingDraft, setCreatingDraft] = useState(false);
   const [basicsError, setBasicsError] = useState<string | null>(null);
 
+  // Shared network/server error surface for steps 1-2 (AI generation,
+  // manual save, publish) — the mock backend never failed, so this states
+  // didn't exist before; a real network call can.
+  const [actionError, setActionError] = useState<string | null>(null);
+
   // Step 1 — tokenomics
   const [mode, setMode] = useState<TokenomicsMode>("choose");
   const [distribution, setDistribution] = useState<DistributionSlice[]>([
@@ -91,17 +96,15 @@ export default function LaunchPage() {
         description: description.trim(),
         totalSupply: supplyNum,
         creator: {
-          id: `creator-${wallet.address}`,
           displayName: displayName.trim(),
           walletAddress: wallet.address ?? "unknown",
-          verified: false,
           isAnonymous,
-          tokensLaunched: 0,
-          createdAt: new Date().toISOString(),
         },
       });
       setToken(draft);
       setStep(1);
+    } catch (err) {
+      setBasicsError(err instanceof Error ? err.message : "Failed to create draft. Try again.");
     } finally {
       setCreatingDraft(false);
     }
@@ -109,6 +112,7 @@ export default function LaunchPage() {
 
   async function handleGenerateAi() {
     if (!token) return;
+    setActionError(null);
     setGeneratingAi(true);
     try {
       const updated = await generateAiTokenomicsDraft(token.id);
@@ -117,6 +121,8 @@ export default function LaunchPage() {
       setVesting(updated.tokenomics.vestingDescription ?? "");
       setSummary(updated.tokenomics.summary);
       setMode("ai");
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Failed to generate a draft. Try again.");
     } finally {
       setGeneratingAi(false);
     }
@@ -142,6 +148,7 @@ export default function LaunchPage() {
 
   async function handleSaveManualTokenomics() {
     if (!token) return;
+    setActionError(null);
     setSavingManual(true);
     try {
       const updated = await setManualTokenomics(token.id, {
@@ -151,6 +158,8 @@ export default function LaunchPage() {
       });
       setToken(updated);
       setStep(2);
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Failed to save tokenomics. Try again.");
     } finally {
       setSavingManual(false);
     }
@@ -162,11 +171,14 @@ export default function LaunchPage() {
 
   async function handlePublish() {
     if (!token) return;
+    setActionError(null);
     setPublishing(true);
     try {
       const updated = await publishToken(token.id);
       setToken(updated);
       setStep(3);
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Failed to publish. Try again.");
     } finally {
       setPublishing(false);
     }
@@ -248,6 +260,11 @@ export default function LaunchPage() {
           {step === 1 && token && (
             <Card>
               <h2 style={{ fontSize: "var(--fs-lg)" }}>Tokenomics</h2>
+              {actionError && (
+                <div style={{ marginBottom: "var(--sp-4)" }}>
+                  <Alert tone="danger">{actionError}</Alert>
+                </div>
+              )}
 
               {mode === "choose" && (
                 <>
@@ -389,6 +406,11 @@ export default function LaunchPage() {
 
           {step === 2 && token && (
             <div>
+              {actionError && (
+                <div style={{ marginBottom: "var(--sp-4)" }}>
+                  <Alert tone="danger">{actionError}</Alert>
+                </div>
+              )}
               <DisclosureCard token={token} />
               <div className={styles.actions}>
                 <Button variant="secondary" onClick={() => setStep(1)}>

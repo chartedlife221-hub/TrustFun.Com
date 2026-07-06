@@ -10,7 +10,7 @@ import type {
   RiskFactor,
   RiskScore,
   Tokenomics,
-} from "../types/token";
+} from "./types/token";
 
 const METHODOLOGY_VERSION = "baseline-rules-v0.1";
 
